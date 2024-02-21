@@ -1,9 +1,35 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { boilerCardsData } from "../data/constants";
 import BoilerCard from "./BoilerCard";
 import { MdKeyboardArrowRight } from "react-icons/md";
+import axios from "axios";
 
 const BoilerDetails = () => {
+  // State to hold API data
+  const [apiData, setApiData] = useState(null);
+
+  // Fetch data from API
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        // Replace 'YOUR_API_ENDPOINT' with your actual API endpoint
+        const response = await axios.get(
+          "https://boilers.megcrm.co.uk/api/getData?Model_data&condensing=false&per_page&specific_columns[0]=*&page=1"
+        );
+        console.log(response.data.data);
+        setApiData(response.data.data);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  // Render loading state if data is not yet fetched
+  if (!apiData) {
+    return <p>Loading...</p>;
+  }
   return (
     <div className="flex flex-col gap-4 w-[825px] h-[885px]">
       {/* top bar */}
@@ -11,7 +37,7 @@ const BoilerDetails = () => {
         {/* top left */}
         <div className="w-[302px] h-[57px] flex flex-col gap-2">
           <h1 className="font-bold text-[26px] leading-7 text-[#545454]">
-            ARCA Pixel 25 FC Boiler{" "}
+            ARCA Pixel 25 FC Boiler
           </h1>
           <p className="font-normal text-[16px] leading-[18px] text-[#7E7E7E]">
             Efficiency Rating
@@ -34,7 +60,7 @@ const BoilerDetails = () => {
             Summary
           </h1>
           <p className="font-normal text-[14px] leading-[20px] text-[#545454]">
-            The ARCS Pixel 25 FC has a SAP seasonal efficiency rating of 89.1%{" "}
+            The ARCS Pixel 25 FC has a SAP seasonal efficiency rating of 89.1%
             <br />
             The Pixel 25 FC is a Condensing Combi boiler with a maximum power
             output of 24.4kw that uses Gas as its fuel sources. This boiler will
@@ -47,6 +73,7 @@ const BoilerDetails = () => {
             className="absolute right-10 top-1"
           />
         </div>
+        {/* Specifications */}
         <div className="space-y-3">
           <h1 className="font-bold text-[16px] leading-[18px] text-[#545454]">
             Specifications
@@ -123,6 +150,7 @@ const BoilerDetails = () => {
           </div>
         </div>
       </div>
+      {/* middle content */}
       <hr className="text-[#00000033] h-[2px] w-[523px] mx-auto  my-5"></hr>
       <div className="flex justify-between mx-8">
         <div className="w-[211px] h-[48px] flex flex-col gap-2">
@@ -142,6 +170,7 @@ const BoilerDetails = () => {
           </p>
         </div>
       </div>
+      {/* bottom content*/}
       <div className="flex justify-between">
         <div className="space-y-3">
           <div className="w-[380px] h-[76px] rounded-[3px]  border border-[#D9D9D9] flex items-center justify-between px-6 py-2 z-0 shadow ">

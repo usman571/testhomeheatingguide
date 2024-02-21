@@ -9,15 +9,15 @@ const BoilerHero = () => {
 
   return (
     <div
-      className=" md:h-[381px] flex justify-between overflow-hidden"
+      className="h-[260px] md:h-[381px] flex justify-between overflow-hidden"
       style={backgroundImageStyle}
     >
-      <div className="max-w-[1280px] mx-auto text-[#FFFFFF] flex items-center justify-center">
+      <div className=" max-w-[1280px] mx-auto text-[#FFFFFF] flex items-center justify-center">
         <div>
-          <h1 className="font-extrabold text-[46px] leading-[55.2px] font-lato text-center mb-4">
+          <h1 className="font-extrabold md:text-[46px] text-[30px] leading-[27.2px] font-lato text-center mb-4">
             Boilers
           </h1>
-          <p className="max-w-[665px] font-lato font-semibold text-[20px]  leading-6">
+          <p className="sm:max-w-[665px] mx-auto max-w-[365px] font-lato font-semibold md:text-[20px] text-[16px]  leading-5">
             Compare boiler efficiencies & find out if a new boiler could save
             you money
           </p>

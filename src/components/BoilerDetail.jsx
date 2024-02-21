@@ -1,11 +1,51 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { CiSearch } from "react-icons/ci";
 import DropDownMenu from "./DropDownMenu";
-import { boilerCardsData, manufacturer, type } from "../data/constants";
 import { Pagination } from "@mui/material";
 import BoilerCard from "./BoilerCard";
+import { manufacturer, type } from "../data/constants";
 
 const BoilerDetail = () => {
+  const [boilerData, setBoilerData] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const itemsPerPage = 10; // Adjust this based on your requirement
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch(
+          `https://boilers.megcrm.co.uk/api/getData?Model_data&condensing=false&per_page=${itemsPerPage}&specific_columns[0]=*&page=${currentPage}`
+        );
+
+        if (!response.ok) {
+          throw new Error("Failed to fetch data");
+        }
+
+        const data = await response.json();
+        console.log(data.data);
+        // Update the total count of items and calculate the number of pages
+        const totalCount = data.data.total;
+        const totalPages = Math.ceil(totalCount / itemsPerPage);
+
+        setBoilerData(data.data.data);
+        setTotalPages(totalPages); // Add this state variable
+
+        setLoading(false);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, [currentPage]);
+
+  const handlePageChange = (event, newPage) => {
+    setCurrentPage(newPage);
+  };
+
   return (
     <div className="flex flex-col gap-4 w-[750px] h-[1012px] ">
       {/* top bar */}
@@ -19,18 +59,18 @@ const BoilerDetail = () => {
                placeholder:text-[14px] placeholder:leading-4 placeholder:text-[#A7A7A7] text-[#A7A7A7]
                   border border-[#D9D9D9] pt-[6px] pr-[116px] pb-[6px] pl-[36px] rounded-[3px] focus:outline-none  w-[280.61px] h-[45.25px]"
             />
-            <div className="absolute inset-y-0 left- pl-1 flex items-center pointer-events-none">
+            <div className="absolute inset-y-0 left- pl-1 flex items-center pointer-events-none ">
               <CiSearch className="h-6 w-6 md:h-6 md:w-7  text-[#545454] absolute  cursor-pointer" />
             </div>
           </div>
-          <div>
+          <div className="z-50 w-[101.82px]">
             <DropDownMenu
               buttonText="Type"
               menuWidth="101.82px"
               menuItems={type}
             />
           </div>
-          <div>
+          <div className="z-50 w-[146.64px]">
             <DropDownMenu
               buttonText="manufacturer"
               menuWidth="146px"
@@ -45,18 +85,27 @@ const BoilerDetail = () => {
         </div>
       </div>
       {/* body */}
-      <div className=" max-w-[750px] h-[841px] flex flex-col gap-3">
-        {boilerCardsData.map((boilerData, index) => (
-          <BoilerCard
-            key={index}
-            model={boilerData.model}
-            type={boilerData.type}
-            manufacturer={boilerData.manufacturer}
-          />
-        ))}
-        <div className="w-[354px] self-center mt-10">
-          <Pagination count={4}/>
-        </div>
+      <div className="max-w-[750px] h-[841px] flex flex-col gap-3 overflow-y-auto cursor-pointer">
+        {loading ? (
+          <p>Loading...</p>
+        ) : (
+          boilerData.map((boiler, index) => (
+            <BoilerCard
+              key={index}
+              model={boiler.Model_data}
+              type={boiler.main_type}
+              fuel={boiler.fuel}
+              efficency={boiler.s_a_p_winter_seasonal_efficiency}
+            />
+          ))
+        )}
+      </div>
+      <div className="w-[354px] self-center mt-10">
+        <Pagination
+          count={totalPages}
+          page={currentPage}
+          onChange={handlePageChange}
+        />
       </div>
     </div>
   );

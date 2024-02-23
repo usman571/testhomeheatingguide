@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import { MdKeyboardArrowDown } from "react-icons/md";
 import { FaBars, FaTimes } from "react-icons/fa";
 
@@ -16,12 +17,13 @@ const Header = () => {
       <div className="container mx-auto flex items-center justify-between">
         {/* Logo  */}
         <div>
-          <span className="text-[#2E3538] text-[20px] font-semibold relative font-Poppins">
+          {/* Use Link for Home */}
+          <Link to="/" className="text-[#2E3538] text-[20px] font-semibold relative font-Poppins cursor-pointer">
             Home Heating
             <span className="absolute font-medium text-sm ml-1 text-[#7E7E7E] font-Poppins">
               Guide
             </span>
-          </span>
+          </Link>
         </div>
 
         {/* List Items */}

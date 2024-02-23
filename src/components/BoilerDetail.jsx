@@ -4,48 +4,54 @@ import DropDownMenu from "./DropDownMenu";
 import { Pagination } from "@mui/material";
 import BoilerCard from "./BoilerCard";
 import { manufacturer, type } from "../data/constants";
+import { Link } from "react-router-dom";
 
-const BoilerDetail = () => {
+const BoilerDetail = ({ manufacturerId }) => {
   const [boilerData, setBoilerData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const itemsPerPage = 10; // Adjust this based on your requirement
+  const itemsPerPage = 10;
+
+  const fetchAndFilterData = async () => {
+    try {
+      const response = await fetch(
+        `https://boilers.megcrm.co.uk/api/getData?Model_data&condensing=false&per_page=${itemsPerPage}&specific_columns[0]=*&page=${currentPage}`
+      );
+      console.log(response);
+      if (!response.ok) {
+        throw new Error("Failed to fetch data");
+      }
+
+      const data = await response.json();
+
+      const totalCount = data.data.total;
+      const totalPages = Math.ceil(totalCount / itemsPerPage);
+      setTotalPages(totalPages);
+
+      const unfilteredData = data.data.data;
+      setBoilerData(
+        manufacturerId
+          ? unfilteredData.filter(
+              (boiler) => boiler.manufacturer_id === manufacturerId
+            )
+          : unfilteredData
+      );
+
+      setLoading(false);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch(
-          `https://boilers.megcrm.co.uk/api/getData?Model_data&condensing=false&per_page=${itemsPerPage}&specific_columns[0]=*&page=${currentPage}`
-        );
-
-        if (!response.ok) {
-          throw new Error("Failed to fetch data");
-        }
-
-        const data = await response.json();
-        console.log(data.data);
-        // Update the total count of items and calculate the number of pages
-        const totalCount = data.data.total;
-        const totalPages = Math.ceil(totalCount / itemsPerPage);
-
-        setBoilerData(data.data.data);
-        setTotalPages(totalPages); // Add this state variable
-
-        setLoading(false);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-        setLoading(false);
-      }
-    };
-
-    fetchData();
-  }, [currentPage]);
+    fetchAndFilterData();
+  }, [currentPage, manufacturerId]);
 
   const handlePageChange = (event, newPage) => {
     setCurrentPage(newPage);
   };
-
   return (
     <div className="flex flex-col gap-4 w-[750px] h-[1012px] ">
       {/* top bar */}
@@ -79,9 +85,11 @@ const BoilerDetail = () => {
           </div>
         </div>
         <div className="ml-auto">
-          <button className="text-[12px] leading-3 flex items-center justify-center ml-auto w-[189px] h-[45px] bg-[#009F78] text-[#FFFFFF] pt-[11px] pr-[41px] pb-[11px] pl-[41px] rounded-[5px] transition-all ease-in duration-300 hover:bg-[#00745E]">
-            Compare
-          </button>
+          <Link to="/boilerdetails">
+            <button className="text-[12px] leading-3 flex items-center justify-center ml-auto w-[189px] h-[45px] bg-[#009F78] text-[#FFFFFF] pt-[11px] pr-[41px] pb-[11px] pl-[41px] rounded-[5px] transition-all ease-in duration-300 hover:bg-[#00745E]">
+              Compare
+            </button>
+          </Link>
         </div>
       </div>
       {/* body */}

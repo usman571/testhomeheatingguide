@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { CiSearch } from "react-icons/ci";
-import DropDownMenu from "./DropDownMenu";
+import DropDownMenu from "../../components/DropDownMenu";
 import { Pagination } from "@mui/material";
 import BoilerCard from "./BoilerCard";
-import { manufacturer, type } from "../data/constants";
+import { manufacturer, type } from "../../data/constants";
 import { Link } from "react-router-dom";
 
 const BoilerDetail = ({ manufacturerId }) => {
@@ -11,14 +11,56 @@ const BoilerDetail = ({ manufacturerId }) => {
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const [token, setToken] = useState(null);
   const itemsPerPage = 10;
+
+  useEffect(() => {
+    // Fetch token when the component mounts
+    const fetchToken = async () => {
+      try {
+        console.log("api is calling");
+        const response = await fetch(
+          "https://boilers.megcrm.co.uk/api/GetToken",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+
+        // if (!response.ok) {
+        //   throw new Error("Failed to authenticate");
+        // }
+
+        const data = await response.json();
+        const authToken = data.token;
+        console.log("auth token");
+        console.log(authToken);
+        setToken(authToken);
+      } catch (error) {
+        console.error("Error during token generation:", error);
+      }
+    };
+
+    fetchToken();
+  }, []);
 
   const fetchAndFilterData = async () => {
     try {
+      const headers = {
+        "Content-Type": "application/json",
+        // Include the token in the Authorization header
+        Authorization: `Bearer ${token}`,
+      };
+
       const response = await fetch(
-        `https://boilers.megcrm.co.uk/api/getData?Model_data&condensing=false&per_page=${itemsPerPage}&specific_columns[0]=*&page=${currentPage}`
+        `https://boilers.megcrm.co.uk/api/getData?Model_data&condensing=false&per_page=${itemsPerPage}&specific_columns[0]=*&page=${currentPage}`,
+        {
+          headers: headers,
+        }
       );
-      console.log(response);
+
       if (!response.ok) {
         throw new Error("Failed to fetch data");
       }
@@ -47,11 +89,12 @@ const BoilerDetail = ({ manufacturerId }) => {
 
   useEffect(() => {
     fetchAndFilterData();
-  }, [currentPage, manufacturerId]);
+  }, [currentPage, manufacturerId, token]);
 
   const handlePageChange = (event, newPage) => {
     setCurrentPage(newPage);
   };
+
   return (
     <div className="flex flex-col gap-4 w-[750px] h-[1012px] ">
       {/* top bar */}

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { boilerCardsData } from "../data/constants";
+import { boilerCardsData } from "../../data/constants";
 import BoilerCard from "./BoilerCard";
 import { MdKeyboardArrowRight } from "react-icons/md";
 import axios from "axios";

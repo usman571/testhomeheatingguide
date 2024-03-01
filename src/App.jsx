@@ -1,8 +1,8 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import BoilerPage from "./pages/BoilerPage";
-import Home from "./pages/Home";
-import BoilerDetails from "./components/BoilerDetails";
+import BoilerPage from "./pages/boiler";
+import Home from "./pages/home";
+import BoilerDetails from "./pages/boiler/BoilerDetails";
 
 export default function App() {
   return (

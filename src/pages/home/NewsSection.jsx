@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from "react";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import Card from "./Card";
-import { newsData } from "../data/constants";
+import { newsData } from "../../data/constants";
 import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from "react-icons/md";
 const responsive = {
   desktop: {

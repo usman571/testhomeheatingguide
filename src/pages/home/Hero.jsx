@@ -10,8 +10,8 @@ import {
 } from "@material-tailwind/react";
 import AOS from "aos";
 import "aos/dist/aos.css";
-import ComboBox from "./mui/manuefacturerDropDown";
-import CustomDivider from "./CusotomDivider";
+import ComboBox from "../../components/mui/manuefacturerDropDown";
+import CustomDivider from "../../components/CusotomDivider";
 const Hero = () => {
   const backgroundImageStyle = {
     backgroundImage: "url('/assets/Background.png')",
@@ -33,7 +33,7 @@ const Hero = () => {
           data-aos-duration="2000"
         >
           <h1 className="font-bold font-lato md:text-[28.33px] text-[20.33px] text-white">
-            Boiler Efficiency Ratings
+            Boiler Efficiency..............
           </h1>
           <p className="font-semibold font-lato md:text-[16px] text-[14px] text-white mb-5 w-[330px] md:w-[530px]">
             Compare boiler efficiencies & find out if a new boiler could save

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { CiSearch } from "react-icons/ci";
-import { manufacturersData as defaultManufacturersData } from "../data/constants";
+import { manufacturersData as defaultManufacturersData } from "../../data/constants";
 import BoilerDetail from "./BoilerDetail";
 import BoilerDetails from "./BoilerDetails";
 
@@ -22,7 +22,7 @@ const BoilerBody = () => {
         if (!response.data.success) {
           throw new Error("Failed to fetch manufacturers data");
         }
-
+        console.log(response.data.data)
         setManufacturersData(response.data.data);
         setLoading(false);
       } catch (error) {

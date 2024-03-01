@@ -2,7 +2,7 @@ import React, { useRef } from "react";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import Card from "./Card";
-import { blogData } from "../data/constants";
+import { blogData } from "../../data/constants";
 
 const responsive = {
   desktop: {

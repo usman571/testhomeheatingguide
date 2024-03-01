@@ -18,7 +18,7 @@ const BoilerDetail = ({ manufacturerId }) => {
     // Fetch token when the component mounts
     const fetchToken = async () => {
       try {
-        console.log("api is calling");
+        console.log("api is calling")
         const response = await fetch(
           "https://boilers.megcrm.co.uk/api/GetToken",
           {
@@ -35,7 +35,7 @@ const BoilerDetail = ({ manufacturerId }) => {
 
         const data = await response.json();
         const authToken = data.token;
-        console.log("auth token");
+        console.log("auth token")
         console.log(authToken);
         setToken(authToken);
       } catch (error) {

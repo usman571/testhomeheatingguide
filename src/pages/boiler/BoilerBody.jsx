@@ -11,18 +11,62 @@ const BoilerBody = () => {
   );
   const [loading, setLoading] = useState(true);
   const [manufacturerId, setManufacturerId] = useState();
+  const [token, setToken] = useState(null);
 
   useEffect(() => {
+    // Fetch token when the component mounts
+    const fetchToken = async () => {
+      try {
+        console.log("api is calling");
+        const response = await fetch(
+          "https://boilers.megcrm.co.uk/api/GetToken",
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+
+        if (!response.ok) {
+          throw new Error("Failed to authenticate");
+        }
+
+        const data = await response.json();
+        const authToken = data.data.token;
+        console.log("auth token");
+        console.log(authToken);
+        setToken(authToken);
+      } catch (error) {
+        console.error("Error during token generation:", error);
+      }
+    };
+
+    fetchToken();
+  }, []);
+
+  useEffect(() => {
+    // Fetch manufacturers using the obtained token
     const fetchManufacturers = async () => {
       try {
+        if (!token) {
+          console.error("Token not available");
+          return;
+        }
+
         const response = await axios.get(
-          "https://boilers.megcrm.co.uk/api/get-manufacturer"
+          "https://boilers.megcrm.co.uk/api/get-manufacturer",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
         );
 
         if (!response.data.success) {
           throw new Error("Failed to fetch manufacturers data");
         }
-        console.log(response.data.data)
+        console.log(response.data.data);
         setManufacturersData(response.data.data);
         setLoading(false);
       } catch (error) {
@@ -32,7 +76,7 @@ const BoilerBody = () => {
     };
 
     fetchManufacturers();
-  }, []);
+  }, [token]);
 
   const handleManufacturerCheckboxChange = (id) => {
     setManufacturerId(id);

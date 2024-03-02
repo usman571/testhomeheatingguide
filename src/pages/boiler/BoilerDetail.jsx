@@ -13,7 +13,7 @@ const BoilerDetail = ({ manufacturerId }) => {
   const [totalPages, setTotalPages] = useState(1);
   const [token, setToken] = useState(null);
   const itemsPerPage = 10;
-
+ 
   useEffect(() => {
     // Fetch token when the component mounts
     const fetchToken = async () => {
@@ -22,7 +22,7 @@ const BoilerDetail = ({ manufacturerId }) => {
         const response = await fetch(
           "https://boilers.megcrm.co.uk/api/GetToken",
           {
-            method: "POST",
+            method: "GET",
             headers: {
               "Content-Type": "application/json",
             },

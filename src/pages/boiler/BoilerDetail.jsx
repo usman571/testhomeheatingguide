@@ -29,14 +29,14 @@ const BoilerDetail = ({ manufacturerId }) => {
           }
         );
 
-        // if (!response.ok) {
-        //   throw new Error("Failed to authenticate");
-        // }
+        if (!response.ok) {
+          throw new Error("Failed to authenticate");
+        }
 
         const data = await response.json();
-        const authToken = data.token;
+        // const authToken = data.token;
         console.log("auth token")
-        console.log(authToken);
+        console.log(data);
         setToken(authToken);
       } catch (error) {
         console.error("Error during token generation:", error);

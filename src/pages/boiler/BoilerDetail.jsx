@@ -34,9 +34,9 @@ const BoilerDetail = ({ manufacturerId }) => {
         }
 
         const data = await response.json();
-        // const authToken = data.token;
+        const authToken = data.data.token;
         console.log("auth token")
-        console.log(data);
+        console.log(authToken);
         setToken(authToken);
       } catch (error) {
         console.error("Error during token generation:", error);
